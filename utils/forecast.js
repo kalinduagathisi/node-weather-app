@@ -3,18 +3,18 @@ const keyConfig = require('../keyConfig');
 
 const forecast = (latitude, longitude, callback) => {
 const weatherApiKey = keyConfig.weatherApiKey;
-const weatherUrl = `http://api.weatherstack.com/current?access_key=${weatherApiKey}&query=${latitude},${longitude}&units=f`;
-request({url: weatherUrl, json: true}, (error, response) => {
+const url = `http://api.weatherstack.com/current?access_key=${weatherApiKey}&query=${latitude},${longitude}&units=f`;
+request({url, json: true}, (error, { body }) => {
 
     if (error){
         callback("Unable to connect to weather api!", undefined)
     }
-    else if (response.body.error){
+    else if (body.error){
         callback("Unable to find location!", undefined)
-        console.log(weatherUrl);
+        console.log(url);
     }
     else {
-        callback(undefined, "It is currently " + response.body.current.temperature + " degrees out. It feels like " + response.body.current.feelslike + " degrees out." )
+        callback(undefined, "It is currently " + body.current.temperature + " degrees out. It feels like " + body.current.feelslike + " degrees out." )
     }
 })
 }
